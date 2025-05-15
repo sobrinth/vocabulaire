@@ -1,8 +1,6 @@
-use crate::Repository;
 use crate::domain::ports::TranslationRepository;
-use crate::domain::voci::{Lang, TranslationRecord, TranslationRecordError, Word};
+use crate::domain::voci::{Lang, TranslationRecordError, Word};
 use crate::driven::repository::{RepoDeleteError, RepoReadError};
-use actix_web::web;
 use thiserror::Error;
 
 #[derive(Debug, PartialEq, Error)]
@@ -31,8 +29,6 @@ pub async fn delete_translation(
 
 #[cfg(test)]
 mod tests {
-    use actix_web::web::Data;
-
     use super::*;
     use crate::tests::{test_utils::shared::*, voci_repo_double::repo_double::VociRepoDouble};
 

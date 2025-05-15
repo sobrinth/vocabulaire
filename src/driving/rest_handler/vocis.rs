@@ -3,6 +3,7 @@ use actix_web::{HttpResponse, web};
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
+use crate::domain;
 use crate::domain::create_translation::CreateError;
 use crate::domain::delete_translation::DeleteError;
 use crate::domain::ports::TranslationRepository;
@@ -11,7 +12,6 @@ use crate::domain::update_translation::UpdateError;
 use crate::domain::voci::{Lang, TranslationRecord};
 use crate::driving::rest_handler::errors::ApiError;
 use crate::driving::rest_handler::validate::validate;
-use crate::{Repository, domain};
 
 /// Helper function to reduce boilerplate of an OK/Json response
 fn respond_json<T>(data: T) -> Result<Json<T>, ApiError>

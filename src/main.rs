@@ -3,7 +3,6 @@ use actix_web::middleware::Logger;
 use actix_web::{App, HttpServer, web, web::Data};
 
 use crate::domain::ports::TranslationRepository;
-use crate::driven::repository::Repository;
 use crate::driving::rest_handler;
 use config::parse_local_config;
 use driven::repository::mongo_repository::VociMongoRepository;
