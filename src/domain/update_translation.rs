@@ -39,10 +39,7 @@ pub async fn update_translation(
     let mut tr_to_be_updated = repository.read_by_word(&word).await?;
 
     tr_to_be_updated.update(
-        extra_translations
-            .into_iter()
-            .map(|t| t.to_string())
-            .collect(),
+        extra_translations.iter().map(|t| t.to_string()).collect(),
         extra_translation_lang.clone(),
     )?;
 

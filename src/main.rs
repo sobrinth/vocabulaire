@@ -1,11 +1,11 @@
+use crate::domain::ports::TranslationRepository;
+use crate::driving::rest_handler;
 use actix_web::dev::Server;
 use actix_web::middleware::Logger;
 use actix_web::{App, HttpServer, web, web::Data};
-use env_logger::Env;
-use crate::domain::ports::TranslationRepository;
-use crate::driving::rest_handler;
 use config::parse_local_config;
 use driven::repository::mongo_repository::VociMongoRepository;
+use env_logger::Env;
 
 mod config;
 mod domain;

@@ -25,7 +25,7 @@ impl ResponseError for ApiError {
             ApiError::NotFound(s) => HttpResponse::NotFound().json(s),
             ApiError::InvalidInput(s) => HttpResponse::BadRequest().json(s),
             ApiError::Conflict(s) => HttpResponse::Conflict().json(s),
-            ApiError::ValidationError(s) => HttpResponse::UnprocessableEntity().json(&s.to_vec()),
+            ApiError::ValidationError(s) => HttpResponse::UnprocessableEntity().json(s.to_vec()),
             ApiError::Unknown(_) => HttpResponse::new(StatusCode::INTERNAL_SERVER_ERROR),
         }
     }

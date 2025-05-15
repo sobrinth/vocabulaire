@@ -99,7 +99,7 @@ impl Translations {
         &self.words
     }
     fn value(&self) -> (&Vec<String>, &Lang) {
-        (&self.translations(), &self.lang)
+        (self.translations(), &self.lang)
     }
 }
 
@@ -123,9 +123,9 @@ impl TranslationRecord {
         let translations = Translations::new(translations, translation_lang)?;
 
         Ok(TranslationRecord {
-            id: id,
-            word: word,
-            translations: translations,
+            id,
+            word,
+            translations,
         })
     }
 
@@ -142,7 +142,7 @@ impl TranslationRecord {
         translations: Vec<String>,
         lang: Lang,
     ) -> Result<(), TranslationRecordError> {
-        if &self.translations.lang != &lang {
+        if self.translations.lang != lang {
             return Err(TranslationRecordError::TranslationLanguageMismatch);
         }
 

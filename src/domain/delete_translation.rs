@@ -22,9 +22,9 @@ pub async fn delete_translation(
 
     let tr_to_be_deleted = repository.read_by_word(&word).await?;
 
-    let delete_response = repository.delete(&tr_to_be_deleted.id()).await?;
+    repository.delete(tr_to_be_deleted.id()).await?; // should be handled properly
 
-    Ok(delete_response)
+    Ok(())
 }
 
 #[cfg(test)]
