@@ -1,7 +1,7 @@
 use actix_web::dev::Server;
 use actix_web::middleware::Logger;
 use actix_web::{App, HttpServer, web, web::Data};
-
+use env_logger::Env;
 use crate::domain::ports::TranslationRepository;
 use crate::driving::rest_handler;
 use config::parse_local_config;
@@ -15,11 +15,7 @@ mod tests;
 
 #[actix_web::main]
 async fn main() {
-    unsafe {
-        std::env::set_var("RUST_LOG", "debug");
-
-        env_logger::init();
-    }
+    env_logger::init_from_env(Env::new().filter_or("VOCI_LOG", "debug"));
 
     let config = parse_local_config();
     let repo = VociMongoRepository::new(&config.persistence).unwrap();
