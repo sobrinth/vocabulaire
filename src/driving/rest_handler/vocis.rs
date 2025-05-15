@@ -9,7 +9,7 @@ use crate::domain::read_translation::ReadError;
 use crate::domain::update_translation::UpdateError;
 use crate::domain::voci::{Lang, TranslationRecord};
 use crate::{Repository, domain};
-
+use crate::domain::ports::TranslationRepository;
 use crate::driving::rest_handler::errors::ApiError;
 use crate::driving::rest_handler::validate::validate;
 
@@ -56,14 +56,14 @@ pub struct CreateTranslationRequest {
     pub translation_lang: Lang,
 }
 
-pub async fn create_translation<T: Repository<TranslationRecord>>(
+pub async fn create_translation<T: TranslationRepository>(
     repository: web::Data<T>,
     request: Json<CreateTranslationRequest>,
 ) -> Result<Json<TranslationResponse>, ApiError> {
     validate(&request)?;
 
     let result = domain::create_translation::create_translation(
-        repository,
+        repository.get_ref(),
         &request.word,
         &request.lang,
         &request.translations.iter().map(|s| s.as_str()).collect(),
@@ -88,14 +88,14 @@ pub struct RequestTranslationByWord {
     pub lang: Lang,
 }
 
-pub async fn read_translation<T: Repository<TranslationRecord>>(
+pub async fn read_translation<T: TranslationRepository>(
     repository: web::Data<T>,
     request: Json<RequestTranslationByWord>,
 ) -> Result<Json<TranslationResponse>, ApiError> {
     validate(&request)?;
-
+    
     let result: Result<TranslationRecord, ReadError> =
-        domain::read_translation::read_translation(repository, &request.word, &request.lang).await;
+        domain::read_translation::read_translation(repository.get_ref(), &request.word, &request.lang).await;
 
     result
         .map(|v| respond_json(TranslationResponse::from(v)))
@@ -106,14 +106,14 @@ pub async fn read_translation<T: Repository<TranslationRecord>>(
         })?
 }
 
-pub async fn update_translation<T: Repository<TranslationRecord>>(
+pub async fn update_translation<T: TranslationRepository>(
     repository: web::Data<T>,
     request: Json<CreateTranslationRequest>,
 ) -> Result<Json<TranslationResponse>, ApiError> {
     validate(&request)?;
 
     let result = domain::update_translation::update_translation(
-        repository,
+        repository.get_ref(),
         &request.word,
         &request.lang,
         &request.translations.iter().map(|s| s.as_str()).collect(),
@@ -130,14 +130,14 @@ pub async fn update_translation<T: Repository<TranslationRecord>>(
         })?
 }
 
-pub async fn delete_translation<T: Repository<TranslationRecord>>(
+pub async fn delete_translation<T: TranslationRepository>(
     repository: web::Data<T>,
     request: Json<RequestTranslationByWord>,
 ) -> Result<HttpResponse, ApiError> {
     validate(&request)?;
 
     let result =
-        domain::delete_translation::delete_translation(repository, &request.word, &request.lang)
+        domain::delete_translation::delete_translation(repository.get_ref(), &request.word, &request.lang)
             .await;
 
     result
@@ -408,7 +408,7 @@ mod tests {
         recipe_req: Option<impl Serialize>,
     ) -> HttpResponse
     where
-        R: Repository<TranslationRecord> + Send + Sync + 'static + Clone,
+        R: TranslationRepository,
         F: Handler<Args>,
         Args: FromRequest + 'static,
         F::Output: Responder,
@@ -451,7 +451,7 @@ mod tests {
         recipe_req: Option<impl Serialize>,
     ) -> Ret
     where
-        R: Repository<TranslationRecord> + Send + Sync + 'static + Clone,
+        R: TranslationRepository,
         F: Handler<Args>,
         Args: FromRequest + 'static,
         F::Output: Responder,

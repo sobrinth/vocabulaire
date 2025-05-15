@@ -1,6 +1,6 @@
 use actix_web::web;
 use thiserror::Error;
-
+use crate::domain::ports::TranslationRepository;
 use crate::Repository;
 use crate::domain::voci::{Lang, TranslationRecord, TranslationRecordError};
 use crate::driven::repository::{RepoCreateError, RepoReadError};
@@ -17,8 +17,8 @@ pub enum CreateError {
     Duplicate,
 }
 
-pub async fn create_translation<T: Repository<TranslationRecord>>(
-    repository: web::Data<T>,
+pub async fn create_translation(
+    repository: &impl TranslationRepository,
     word: &str,
     word_lang: &Lang,
     translations: &Vec<&str>,

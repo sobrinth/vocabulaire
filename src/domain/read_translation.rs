@@ -1,7 +1,5 @@
-use actix_web::web;
 use thiserror::Error;
-
-use crate::Repository;
+use crate::domain::ports::TranslationRepository;
 use crate::domain::voci::{Lang, TranslationRecord, TranslationRecordError, Word};
 use crate::driven::repository::RepoReadError;
 
@@ -15,8 +13,8 @@ pub enum ReadError {
     Unknown,
 }
 
-pub async fn read_translation<T: Repository<TranslationRecord>>(
-    repository: web::Data<T>,
+pub async fn read_translation(
+    repository: &impl TranslationRepository,
     word: &str,
     lang: &Lang,
 ) -> Result<TranslationRecord, ReadError> {
@@ -41,7 +39,7 @@ mod tests {
     async fn read_well_formatted_word() {
         let repo = VociRepoDouble::new(&get_testing_persistence_config()).unwrap();
 
-        let read_trans = read_translation(Data::new(repo), WORD, &WORD_LANG).await;
+        let read_trans = read_translation(&repo, WORD, &WORD_LANG).await;
 
         assert_eq!(stub_translation_record(false), read_trans.unwrap())
     }
@@ -50,7 +48,7 @@ mod tests {
     async fn read_badly_formatted_word_err() {
         let repo = VociRepoDouble::new(&get_testing_persistence_config()).unwrap();
 
-        let read_trans = read_translation(Data::new(repo), "", &WORD_LANG).await;
+        let read_trans = read_translation(&repo, "", &WORD_LANG).await;
 
         assert_eq!(read_trans.is_err(), true);
         assert_eq!(

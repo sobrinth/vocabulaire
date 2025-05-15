@@ -1,6 +1,6 @@
 use actix_web::web;
 use thiserror::Error;
-
+use crate::domain::ports::TranslationRepository;
 use crate::Repository;
 use crate::domain::voci::{Lang, TranslationRecord, TranslationRecordError, Word};
 use crate::driven::repository::{RepoDeleteError, RepoReadError};
@@ -15,8 +15,8 @@ pub enum DeleteError {
     DeleteError(#[from] RepoDeleteError),
 }
 
-pub async fn delete_translation<T: Repository<TranslationRecord>>(
-    repository: web::Data<T>,
+pub async fn delete_translation(
+    repository: &impl TranslationRepository,
     word: &str,
     lang: &Lang,
 ) -> Result<(), DeleteError> {
@@ -40,7 +40,7 @@ mod tests {
     async fn delete_ok_word_ok() {
         let repo = VociRepoDouble::new(&get_testing_persistence_config()).unwrap();
 
-        let response = delete_translation(Data::new(repo), WORD, &WORD_LANG).await;
+        let response = delete_translation(&repo, WORD, &WORD_LANG).await;
 
         assert_eq!(response, Ok(()));
     }
@@ -49,7 +49,7 @@ mod tests {
     async fn delete_bad_word_err() {
         let repo = VociRepoDouble::new(&get_testing_persistence_config()).unwrap();
 
-        let response = delete_translation(Data::new(repo), "", &WORD_LANG).await;
+        let response = delete_translation(&repo, "", &WORD_LANG).await;
 
         assert_eq!(response.is_err(), true);
         assert_eq!(
@@ -63,7 +63,7 @@ mod tests {
         let mut  repo = VociRepoDouble::new(&get_testing_persistence_config()).unwrap();
         repo.set_error(true);
 
-        let response = delete_translation(Data::new(repo), WORD, &WORD_LANG).await;
+        let response = delete_translation(&repo, WORD, &WORD_LANG).await;
 
         assert_eq!(response.is_err(), true);
         assert_eq!(
