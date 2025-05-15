@@ -1,7 +1,7 @@
-use thiserror::Error;
 use crate::domain::ports::TranslationRepository;
 use crate::domain::voci::{Lang, TranslationRecord, TranslationRecordError, Word};
 use crate::driven::repository::RepoReadError;
+use thiserror::Error;
 
 #[derive(Debug, PartialEq, Error)]
 pub enum ReadError {

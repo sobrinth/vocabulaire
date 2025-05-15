@@ -1,9 +1,9 @@
-use actix_web::web;
-use thiserror::Error;
-use crate::domain::ports::TranslationRepository;
 use crate::Repository;
+use crate::domain::ports::TranslationRepository;
 use crate::domain::voci::{Lang, TranslationRecord, TranslationRecordError};
 use crate::driven::repository::{RepoCreateError, RepoReadError};
+use actix_web::web;
+use thiserror::Error;
 
 #[derive(Debug, PartialEq, Error)]
 pub enum CreateError {
@@ -49,4 +49,3 @@ pub async fn create_translation(
         Err(CreateError::Duplicate)
     }
 }
-

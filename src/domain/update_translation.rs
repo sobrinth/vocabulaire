@@ -1,7 +1,7 @@
-use thiserror::Error;
 use crate::domain::ports::TranslationRepository;
 use crate::domain::voci::{Lang, TranslationRecord, TranslationRecordError, Word};
 use crate::driven::repository::{RepoReadError, RepoUpdateError};
+use thiserror::Error;
 
 #[derive(Debug, PartialEq, Error)]
 pub enum UpdateError {
@@ -62,14 +62,8 @@ mod tests {
     async fn update_existing_record_with_no_extra_word() {
         let repo = VociRepoDouble::new(&get_testing_persistence_config()).unwrap();
 
-        let updated_tr = update_translation(
-            &repo,
-            &WORD,
-            &WORD_LANG,
-            &[].to_vec(),
-            &TRANSLATION_LANG,
-        )
-        .await;
+        let updated_tr =
+            update_translation(&repo, &WORD, &WORD_LANG, &[].to_vec(), &TRANSLATION_LANG).await;
 
         let updated_translation = updated_tr.unwrap();
         let (_, _, _, actual_translations, _) = updated_translation.flat();

@@ -11,8 +11,6 @@ const PERSISTENCE_DB: &str = "PERSISTENCE_DB";
 const PERSISTENCE_SCHEMA_COLLECTION: &str = "PERSISTENCE_SCHEMA";
 const AUTH_DB: &str = "AUTH_DB";
 
-
-
 const CONFIG_PATH: &str = "resources/config.toml";
 
 #[derive(Deserialize)]

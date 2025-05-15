@@ -5,13 +5,12 @@ pub mod repo_double {
 
     use crate::config::PersistenceConfig;
     use crate::domain::ports::TranslationRepository;
-    use crate::domain::voci::{TranslationRecord, TranslationId, Word};
+    use crate::domain::voci::{TranslationId, TranslationRecord, Word};
     use crate::driven::repository::{
         RepoCreateError, RepoDeleteError, RepoReadError, RepoUpdateError, Repository,
     };
     use crate::tests::test_utils::shared::*;
 
-    
     #[derive(Clone)]
     struct Wrap(RefCell<bool>);
 

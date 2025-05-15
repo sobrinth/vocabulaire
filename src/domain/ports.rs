@@ -1,7 +1,7 @@
-use async_trait::async_trait;
 use crate::config::PersistenceConfig;
 use crate::domain::voci::{TranslationId, TranslationRecord, Word};
 use crate::driven::repository::{RepoCreateError, RepoDeleteError, RepoReadError, RepoUpdateError};
+use async_trait::async_trait;
 
 #[async_trait]
 pub trait TranslationRepository: Send + Sync + Clone + 'static {

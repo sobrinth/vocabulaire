@@ -1,8 +1,8 @@
 use std::str::FromStr;
 
 use async_trait::async_trait;
-use mongodb::bson::oid::ObjectId;
 use mongodb::bson::doc;
+use mongodb::bson::oid::ObjectId;
 
 use mongodb::{Client, Collection, bson};
 use serde::{Deserialize, Serialize};
@@ -10,10 +10,10 @@ use serde::{Deserialize, Serialize};
 use crate::config::PersistenceConfig;
 use crate::domain::ports::TranslationRepository;
 use crate::domain::voci::{Lang, TranslationId, TranslationRecord, TranslationRecordError, Word};
-use crate::driven::repository::RepoUpdateError;
-use crate::driven::repository::RepoReadError;
-use crate::driven::repository::RepoDeleteError;
 use crate::driven::repository::RepoCreateError;
+use crate::driven::repository::RepoDeleteError;
+use crate::driven::repository::RepoReadError;
+use crate::driven::repository::RepoUpdateError;
 
 // Implement the `From<Lang> for Bson` trait
 impl From<Lang> for bson::Bson {
@@ -84,7 +84,6 @@ impl VociMongoRepository {
         let client = self.open_connection().await;
         client.database(&self.database).collection(&self.collection)
     }
-
 }
 
 #[async_trait]
@@ -193,7 +192,6 @@ impl TranslationRepository for VociMongoRepository {
 
     async fn delete(&self, id: &TranslationId) -> Result<(), RepoDeleteError> {
         let oid = match id.value() {
-
             Some(v) => v,
             None => return Err(RepoDeleteError::BadId),
         };
@@ -205,23 +203,21 @@ impl TranslationRepository for VociMongoRepository {
         let collection = self.get_collection().await;
 
         let res = collection
-            .delete_one(
-                doc! {
-                    "_id": object_id
-                }
-            )
+            .delete_one(doc! {
+                "_id": object_id
+            })
             .await;
 
-            match res {
-                Ok(r) => {
-                    if r.deleted_count > 0 {
-                        Ok(())
-                    } else {
-                        Err(RepoDeleteError::NotFound)
-                    }
+        match res {
+            Ok(r) => {
+                if r.deleted_count > 0 {
+                    Ok(())
+                } else {
+                    Err(RepoDeleteError::NotFound)
                 }
-                Err(_) => Err(RepoDeleteError::Unknown),
             }
+            Err(_) => Err(RepoDeleteError::Unknown),
+        }
     }
 }
 
@@ -242,7 +238,7 @@ fn create_connection_uri(config: &PersistenceConfig) -> String {
 mod tests {
     use crate::tests::test_utils::shared::{
         ADDITONAL_TRANSLATIONS, assert_on_translation_record, get_testing_persistence_config,
-        stub_translation_record, setup_repo,
+        setup_repo, stub_translation_record,
     };
     use serial_test::serial;
 
@@ -264,8 +260,7 @@ mod tests {
     fn new_repo_bad_config_error() {
         let mut config = get_testing_persistence_config();
         config.host = "".to_string();
-        let result: Result<VociMongoRepository, String> =
-            VociMongoRepository::new(&config);
+        let result: Result<VociMongoRepository, String> = VociMongoRepository::new(&config);
 
         assert_eq!(result.is_err(), true);
     }

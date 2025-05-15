@@ -2,9 +2,9 @@
 
 pub mod shared {
 
-    use std::path::PathBuf;
     use mongodb::Collection;
     use mongodb::bson::doc;
+    use std::path::PathBuf;
 
     use crate::config::{Config, PersistenceConfig, parse_config};
     use crate::domain::voci::{Lang, TranslationRecord};

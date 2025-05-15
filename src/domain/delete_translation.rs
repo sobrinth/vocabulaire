@@ -1,9 +1,9 @@
-use actix_web::web;
-use thiserror::Error;
-use crate::domain::ports::TranslationRepository;
 use crate::Repository;
+use crate::domain::ports::TranslationRepository;
 use crate::domain::voci::{Lang, TranslationRecord, TranslationRecordError, Word};
 use crate::driven::repository::{RepoDeleteError, RepoReadError};
+use actix_web::web;
+use thiserror::Error;
 
 #[derive(Debug, PartialEq, Error)]
 pub enum DeleteError {
@@ -60,7 +60,7 @@ mod tests {
 
     #[actix_rt::test]
     async fn delete_manually_provoked_error_err() {
-        let mut  repo = VociRepoDouble::new(&get_testing_persistence_config()).unwrap();
+        let mut repo = VociRepoDouble::new(&get_testing_persistence_config()).unwrap();
         repo.set_error(true);
 
         let response = delete_translation(&repo, WORD, &WORD_LANG).await;
