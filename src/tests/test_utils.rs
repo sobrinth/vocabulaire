@@ -7,9 +7,9 @@ pub mod shared {
     use std::path::PathBuf;
 
     use crate::config::{Config, PersistenceConfig, parse_config};
+    use crate::domain::ports::TranslationRepository;
     use crate::domain::voci::{Lang, TranslationRecord};
 
-    use crate::driven::repository::Repository;
     use crate::driven::repository::mongo_repository::VociMongoRepository;
 
     /// Constants
@@ -76,7 +76,7 @@ pub mod shared {
 
     pub async fn setup_repo() -> VociMongoRepository {
         let config = get_testing_persistence_config();
-        let repo: VociMongoRepository = Repository::<TranslationRecord>::new(&config).unwrap();
+        let repo: VociMongoRepository = VociMongoRepository::new(&config).unwrap();
 
         delete_collection(config, &repo).await;
 

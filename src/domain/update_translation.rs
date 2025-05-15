@@ -53,8 +53,6 @@ pub async fn update_translation(
 
 #[cfg(test)]
 mod tests {
-    use actix_web::web::Data;
-
     use super::*;
     use crate::tests::{test_utils::shared::*, voci_repo_double::repo_double::VociRepoDouble};
 
