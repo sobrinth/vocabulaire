@@ -89,8 +89,6 @@ impl VociMongoRepository {
 #[async_trait]
 impl TranslationRepository for VociMongoRepository {
     fn new(config: &PersistenceConfig) -> Result<Self, String>
-    where
-        Self: Sized,
     {
         config.validate()?;
         let config = config.clone();

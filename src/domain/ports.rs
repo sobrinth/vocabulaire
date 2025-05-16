@@ -6,9 +6,7 @@ use async_trait::async_trait;
 #[async_trait]
 pub trait TranslationRepository: Send + Sync + Clone + 'static {
     /// Creation of a repository
-    fn new(config: &PersistenceConfig) -> Result<Self, String>
-    where
-        Self: Sized;
+    fn new(config: &PersistenceConfig) -> Result<Self, String>;
 
     /// Insert the received TranslationRecord in the persistence system
     async fn create(&self, tr: &TranslationRecord) -> Result<TranslationRecord, RepoCreateError>;

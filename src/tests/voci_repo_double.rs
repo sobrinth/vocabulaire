@@ -30,8 +30,6 @@ pub mod repo_double {
     #[async_trait]
     impl TranslationRepository for VociRepoDouble {
         fn new(_config: &PersistenceConfig) -> Result<Self, String>
-        where
-            Self: Sized,
         {
             Ok(VociRepoDouble {
                 has_error: Wrap(RefCell::from(false)),
