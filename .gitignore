@@ -5,3 +5,14 @@ target/
 *.pdb
 
 .secrets
+
+#VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+tarpaulin-report.html
+
+# Jetbrains (RustRover)
+.idea/*
